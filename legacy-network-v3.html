@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>LEGACY DJOUBATÉ — Réseau Stratégique</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{background-color:#0A0A0A!important;color:#F5EDD6;font-family:'Space Mono',monospace;min-height:100vh;overflow-x:hidden;}
+
+/* VARIABLES */
+:root{
+  --gold:#C9A84C;--gold-dim:#8B6E2E;--gold-pale:rgba(201,168,76,0.15);
+  --dark:#0A0A0A;--d2:#111111;--d3:#1A1A1A;--d4:#242424;
+  --cream:#F5EDD6;--cream-dim:#B8A98A;
+  --red:#C0392B;--green:#27AE60;--blue:#2980B9;--orange:#D35400;--purple:#8E44AD;
+  --warm:#E67E22;
+}
+
+/* HEADER */
+header{background-color:#0A0A0A;border-bottom:1px solid rgba(201,168,76,0.2);padding:28px 32px 20px;position:relative;z-index:10;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;}
+.logo-block .tri{font-size:22px;color:#C9A84C;letter-spacing:3px;}
+.logo-block h1{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;color:#F5EDD6;letter-spacing:2px;line-height:1;}
+.logo-block .sub{font-size:8px;color:#C9A84C;letter-spacing:5px;text-transform:uppercase;margin-top:5px;}
+.date-block{text-align:right;}
+.date-block .dt{font-size:10px;color:#C9A84C;letter-spacing:3px;}
+.mod-badge{display:inline-block;margin-top:6px;padding:4px 10px;border:1px solid #C9A84C;font-size:8px;letter-spacing:3px;color:#C9A84C;}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);background-color:#0A0A0A;border:1px solid rgba(201,168,76,0.15);margin:20px 32px 0;gap:1px;}
+.stat-box{background-color:#111111;padding:14px 10px;text-align:center;}
+.stat-n{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:#C9A84C;line-height:1;}
+.stat-l{font-size:7px;letter-spacing:2px;color:#B8A98A;margin-top:4px;text-transform:uppercase;}
+
+/* NAV TABS */
+.nav-tabs{display:flex;background-color:#111111;border-bottom:1px solid rgba(201,168,76,0.15);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{flex-shrink:0;padding:12px 20px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#B8A98A;cursor:pointer;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;font-family:'Space Mono',monospace;transition:all 0.2s;white-space:nowrap;}
+.nav-tab.active{color:#C9A84C;border-bottom-color:#C9A84C;}
+
+/* LAYOUT */
+.app-body{display:flex;min-height:calc(100vh - 200px);}
+.sidebar{width:240px;flex-shrink:0;background-color:#0A0A0A;border-right:1px solid rgba(201,168,76,0.12);overflow-y:auto;max-height:calc(100vh - 200px);position:sticky;top:0;}
+.main-content{flex:1;overflow-y:auto;background-color:#0A0A0A;}
+
+/* SIDEBAR */
+.s-section{padding:14px 16px;border-bottom:1px solid rgba(201,168,76,0.08);}
+.s-title{font-size:7px;letter-spacing:3px;color:#8B6E2E;text-transform:uppercase;margin-bottom:10px;}
+.s-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 0;background:none;border:none;cursor:pointer;font-family:'Space Mono',monospace;font-size:9px;color:#B8A98A;text-align:left;transition:color 0.2s;letter-spacing:1px;}
+.s-btn:hover,.s-btn.active{color:#F5EDD6;}
+.s-btn.active .sdot{opacity:1;}
+.sdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;opacity:0.35;transition:opacity 0.2s;}
+.s-count{margin-left:auto;font-size:8px;color:#8B6E2E;background:rgba(201,168,76,0.08);padding:1px 5px;}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:6px;margin:12px 16px;padding:9px;background:rgba(201,168,76,0.06);border:1px dashed rgba(201,168,76,0.35);cursor:pointer;font-family:'Space Mono',monospace;font-size:9px;color:#C9A84C;letter-spacing:2px;transition:all 0.2s;width:calc(100% - 32px);}
+.add-btn:hover{background:rgba(201,168,76,0.12);}
+
+/* CONTENT */
+.c-pad{padding:24px 28px;}
+.search-wrap{display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(201,168,76,0.2);padding-bottom:12px;margin-bottom:20px;}
+.search-wrap input{flex:1;background:transparent;border:none;outline:none;font-family:'Space Mono',monospace;font-size:11px;color:#F5EDD6;letter-spacing:1px;}
+.search-wrap input::placeholder{color:#B8A98A;opacity:0.5;}
+
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.sec-title{font-size:8px;letter-spacing:4px;color:#B8A98A;text-transform:uppercase;}
+.res-count{font-size:8px;color:#8B6E2E;letter-spacing:2px;}
+
+/* CARDS */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+.card{background-color:#111111;border:1px solid rgba(201,168,76,0.1);padding:16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.card:hover{border-color:rgba(201,168,76,0.38);background-color:#161616;transform:translateY(-1px);}
+.card-stripe{position:absolute;top:0;left:0;width:3px;height:100%;}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
+.card-name{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:#F5EDD6;line-height:1.2;flex:1;margin-right:8px;}
+.card-pri{font-size:7px;letter-spacing:2px;padding:2px 6px;border:1px solid;text-transform:uppercase;flex-shrink:0;margin-top:2px;}
+.card-role{font-size:8px;color:#C9A84C;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.card-desc{font-size:9px;color:#B8A98A;line-height:1.6;margin-bottom:10px;}
+.card-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.tag{font-size:7px;padding:2px 6px;background:rgba(201,168,76,0.07);color:#8B6E2E;border:1px solid rgba(201,168,76,0.12);}
+.card-status{display:flex;align-items:center;gap:5px;padding-top:8px;border-top:1px solid rgba(201,168,76,0.07);font-size:8px;color:#B8A98A;}
+.sdot2{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+
+/* HEAT INDICATOR */
+.heat-bar{height:2px;margin-top:6px;border-radius:1px;transition:width 0.3s;}
+
+/* NO RESULTS */
+.no-res{text-align:center;padding:60px 0;color:#B8A98A;font-size:10px;letter-spacing:2px;}
+
+/* ===== VIEWS ===== */
+.view{display:none;}
+.view.active{display:block;}
+
+/* ANALYTICS VIEW */
+.analytics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-bottom:24px;}
+.a-card{background-color:#111111;border:1px solid rgba(201,168,76,0.12);padding:20px;}
+.a-title{font-size:8px;letter-spacing:3px;color:#8B6E2E;text-transform:uppercase;margin-bottom:14px;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bar-label{font-size:9px;color:#B8A98A;width:100px;flex-shrink:0;}
+.bar-track{flex:1;height:6px;background-color:#1A1A1A;border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+.bar-num{font-size:8px;color:#C9A84C;width:20px;text-align:right;flex-shrink:0;}
+
+.coverage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.cov-cell{background-color:#1A1A1A;padding:10px;text-align:center;border:1px solid rgba(201,168,76,0.08);}
+.cov-score{font-family:'Cormorant Garamond',serif;font-size:24px;color:#C9A84C;}
+.cov-label{font-size:7px;color:#B8A98A;letter-spacing:1px;margin-top:3px;}
+.cov-cell.weak{border-color:rgba(192,57,43,0.3);}
+.cov-cell.strong{border-color:rgba(39,174,96,0.3);}
+
+/* AGENDA VIEW */
+.agenda-list{display:flex;flex-direction:column;gap:10px;}
+.agenda-item{background-color:#111111;border:1px solid rgba(201,168,76,0.1);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+.agenda-item:hover{border-color:rgba(201,168,76,0.3);}
+.agenda-urgency{width:4px;height:40px;border-radius:2px;flex-shrink:0;}
+.agenda-name{font-family:'Cormorant Garamond',serif;font-size:15px;color:#F5EDD6;margin-bottom:3px;}
+.agenda-info{font-size:8px;color:#B8A98A;letter-spacing:1px;}
+.agenda-days{margin-left:auto;text-align:right;flex-shrink:0;}
+.agenda-days .num{font-family:'Cormorant Garamond',serif;font-size:22px;color:#C9A84C;line-height:1;}
+.agenda-days .lbl{font-size:7px;color:#8B6E2E;letter-spacing:1px;}
+
+/* NOTES / DETAIL */
+.notes-area{width:100%;background-color:#1A1A1A;border:1px solid rgba(201,168,76,0.15);padding:10px 12px;font-family:'Space Mono',monospace;font-size:10px;color:#F5EDD6;resize:vertical;min-height:80px;outline:none;line-height:1.6;}
+.notes-area:focus{border-color:#C9A84C;}
+.save-note-btn{margin-top:6px;padding:6px 14px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);color:#C9A84C;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;}
+
+/* ===== MODALS ===== */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);backdrop-filter:blur(3px);z-index:200;display:none;align-items:center;justify-content:center;padding:16px;}
+.overlay.open{display:flex;}
+.modal-box{background-color:#111111;border:1px solid rgba(201,168,76,0.28);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;padding:28px;position:relative;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:#B8A98A;font-size:16px;cursor:pointer;font-family:'Space Mono',monospace;padding:4px;}
+.modal-tri{font-size:16px;color:#C9A84C;margin-bottom:5px;}
+.modal-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:700;color:#F5EDD6;margin-bottom:3px;}
+.modal-role{font-size:9px;color:#C9A84C;letter-spacing:3px;text-transform:uppercase;margin-bottom:18px;padding-bottom:16px;border-bottom:1px solid rgba(201,168,76,0.12);}
+.ms{margin-bottom:16px;}
+.ms-t{font-size:7px;letter-spacing:3px;color:#8B6E2E;text-transform:uppercase;margin-bottom:6px;}
+.ms-v{font-size:10px;color:#B8A98A;line-height:1.7;}
+.info-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.1);margin-bottom:4px;font-size:9px;color:#F5EDD6;}
+.advice-box{background:rgba(201,168,76,0.04);border-left:2px solid #C9A84C;padding:10px 14px;font-size:9px;color:#B8A98A;line-height:1.7;font-style:italic;}
+.action-box{font-size:10px;color:#C9A84C;font-weight:700;}
+
+/* HEAT BADGE */
+.heat-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;font-size:7px;letter-spacing:1px;border:1px solid;margin-bottom:12px;}
+
+/* FORM */
+.form-box{background-color:#111111;border:1px solid rgba(201,168,76,0.28);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:28px;position:relative;}
+.form-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:#F5EDD6;margin-bottom:3px;}
+.form-sub{font-size:8px;color:#C9A84C;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(201,168,76,0.12);}
+.fg{margin-bottom:14px;}
+.fl{font-size:7px;letter-spacing:3px;color:#8B6E2E;text-transform:uppercase;display:block;margin-bottom:5px;}
+.fi,.fs,.fta{width:100%;background-color:#1A1A1A;border:1px solid rgba(201,168,76,0.18);padding:9px 11px;font-family:'Space Mono',monospace;font-size:10px;color:#F5EDD6;outline:none;}
+.fi:focus,.fs:focus,.fta:focus{border-color:#C9A84C;}
+.fs option{background:#1A1A1A;color:#F5EDD6;}
+.fta{resize:vertical;min-height:70px;line-height:1.6;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fsub{width:100%;padding:11px;background:rgba(201,168,76,0.08);border:1px solid #C9A84C;color:#C9A84C;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:3px;cursor:pointer;text-transform:uppercase;margin-top:6px;}
+.fsub:hover{background:rgba(201,168,76,0.18);}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background-color:#1A1A1A;border:1px solid #C9A84C;padding:12px 18px;font-size:9px;color:#C9A84C;letter-spacing:2px;z-index:999;opacity:0;transition:opacity 0.3s;}
+.toast.show{opacity:1;}
+
+/* MOBILE */
+@media(max-width:700px){
+  header{padding:18px 16px 14px;}
+  .logo-block h1{font-size:26px;}
+  .stats-bar{grid-template-columns:repeat(3,1fr);margin:14px 16px 0;}
+  .stat-box:nth-child(4),.stat-box:nth-child(5){display:none;}
+  .app-body{flex-direction:column;}
+  .sidebar{width:100%;max-height:none;position:static;border-right:none;border-bottom:1px solid rgba(201,168,76,0.12);}
+  .sidebar .s-section{display:none;}
+  .sidebar .add-btn{display:flex;}
+  .sidebar-toggle{display:flex!important;}
+  .c-pad{padding:16px;}
+  .grid{grid-template-columns:1fr;}
+  .frow{grid-template-columns:1fr;}
+  .modal-box,.form-box{padding:20px 16px;max-height:92vh;}
+  .analytics-grid{grid-template-columns:1fr;}
+  .coverage-grid{grid-template-columns:repeat(2,1fr);}
+}
+.sidebar-toggle{display:none;align-items:center;justify-content:space-between;padding:10px 16px;cursor:pointer;font-size:9px;color:#C9A84C;letter-spacing:2px;border-bottom:1px solid rgba(201,168,76,0.1);}
+.sidebar-sections{display:block;}
+@media(max-width:700px){
+  .sidebar-sections.collapsed{display:none;}
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:#0A0A0A;}
+::-webkit-scrollbar-thumb{background:#8B6E2E;}
+
+/* NEW BADGE */
+.new-badge{font-size:7px;padding:1px 5px;background:rgba(39,174,96,0.12);border:1px solid rgba(39,174,96,0.3);color:#27AE60;margin-left:5px;}
+
+/* EXPORT BUTTON */
+.export-btn{padding:6px 14px;background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.25);color:#C9A84C;font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;cursor:pointer;}
+.export-btn:hover{background:rgba(201,168,76,0.12);}
+</style>
+</head>
+<body style="background-color:#0A0A0A;">
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <div class="logo-block">
+      <div class="tri">🔱</div>
+      <h1>LEGACY DJOUBATÉ</h1>
+      <div class="sub">Réseau Stratégique — Système DIA 2.0</div>
+    </div>
+    <div class="date-block">
+      <div class="dt">MARS 2026</div>
+      <div class="mod-badge">MODULE 2 — ACTIF DÈS 12 MARS</div>
+    </div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat-box"><div class="stat-n" id="sTot">0</div><div class="stat-l">Total</div></div>
+    <div class="stat-box"><div class="stat-n" id="sPri">0</div><div class="stat-l">Priorité Max</div></div>
+    <div class="stat-box"><div class="stat-n">7</div><div class="stat-l">Pays</div></div>
+    <div class="stat-box"><div class="stat-n">5</div><div class="stat-l">Domaines</div></div>
+    <div class="stat-box"><div class="stat-n" id="sAct">0</div><div class="stat-l">Actifs</div></div>
+  </div>
+</header>
+
+<!-- NAV TABS -->
+<div class="nav-tabs">
+  <button class="nav-tab active" onclick="switchView('contacts',this)">Contacts</button>
+  <button class="nav-tab" onclick="switchView('agenda',this)">Agenda Relances</button>
+  <button class="nav-tab" onclick="switchView('analytics',this)">Analytique</button>
+</div>
+
+<div class="app-body">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+    <span>FILTRES</span><span id="toggleIcon">▼</span>
+  </div>
+  <div class="sidebar-sections" id="sidebarSections">
+    <div class="s-section">
+      <div class="s-title">Domaine</div>
+      <button class="s-btn active" onclick="setFilter('all','all',this)"><span class="sdot" style="background:#C9A84C"></span>Tous<span class="s-count" id="b-all">0</span></button>
+      <button class="s-btn" onclick="setFilter('domaine','juridique',this)"><span class="sdot" style="background:#2980B9"></span>Juridique<span class="s-count" id="b-juridique">0</span></button>
+      <button class="s-btn" onclick="setFilter('domaine','minier',this)"><span class="sdot" style="background:#D35400"></span>Minier<span class="s-count" id="b-minier">0</span></button>
+      <button class="s-btn" onclick="setFilter('domaine','academique',this)"><span class="sdot" style="background:#27AE60"></span>Académique<span class="s-count" id="b-academique">0</span></button>
+      <button class="s-btn" onclick="setFilter('domaine','finance',this)"><span class="sdot" style="background:#8E44AD"></span>Finance<span class="s-count" id="b-finance">0</span></button>
+      <button class="s-btn" onclick="setFilter('domaine','institutionnel',this)"><span class="sdot" style="background:#C0392B"></span>Institutionnel<span class="s-count" id="b-institutionnel">0</span></button>
+    </div>
+    <div class="s-section">
+      <div class="s-title">Priorité</div>
+      <button class="s-btn" onclick="setFilter('priority','MAX',this)"><span class="sdot" style="background:#C0392B"></span>Maximale</button>
+      <button class="s-btn" onclick="setFilter('priority','HAUTE',this)"><span class="sdot" style="background:#D35400"></span>Haute</button>
+      <button class="s-btn" onclick="setFilter('status','reunion',this)"><span class="sdot" style="background:#E67E22"></span>Réunion planifiée</button>
+    </div>
+    <div class="s-section">
+      <div class="s-title">Géographie</div>
+      <button class="s-btn" onclick="setFilter('geo','Guinée',this)"><span class="sdot" style="background:#C9A84C"></span>Guinée</button>
+      <button class="s-btn" onclick="setFilter('geo','France',this)"><span class="sdot" style="background:#2980B9"></span>France</button>
+      <button class="s-btn" onclick="setFilter('geo','Cameroun',this)"><span class="sdot" style="background:#27AE60"></span>Cameroun</button>
+      <button class="s-btn" onclick="setFilter('geo','Afrique',this)"><span class="sdot" style="background:#D35400"></span>Autres Afrique</button>
+    </div>
+    <div class="s-section">
+      <div class="s-title">Chaleur réseau</div>
+      <button class="s-btn" onclick="setFilter('heat','hot',this)"><span class="sdot" style="background:#C0392B"></span>Chaud (actif récent)</button>
+      <button class="s-btn" onclick="setFilter('heat','warm',this)"><span class="sdot" style="background:#E67E22"></span>Tiède</button>
+      <button class="s-btn" onclick="setFilter('heat','cold',this)"><span class="sdot" style="background:#2980B9"></span>À relancer</button>
+    </div>
+    <div class="s-section">
+      <div class="s-title">Légende</div>
+      <div style="font-size:8px;color:#B8A98A;line-height:2;letter-spacing:1px;">
+        🟢 Actif &nbsp; 🟡 En attente<br>
+        🟠 Réunion &nbsp; 🔴 Urgent
+      </div>
+    </div>
+  </div>
+  <button class="add-btn" onclick="openAddForm()">+ AJOUTER UN CONTACT</button>
+</aside>
+
+<!-- MAIN -->
+<div class="main-content">
+
+  <!-- VIEW: CONTACTS -->
+  <div class="view active" id="view-contacts">
+    <div class="c-pad">
+      <div class="search-wrap">
+        <span style="color:#8B6E2E;font-size:14px">⌕</span>
+        <input type="text" id="searchInput" placeholder="Rechercher nom, rôle, pays, tag..." oninput="applyFilters()">
+        <button class="export-btn" onclick="exportVisible()">↓ EXPORT</button>
+      </div>
+      <div class="sec-hdr">
+        <div class="sec-title">Contacts Stratégiques</div>
+        <div class="res-count" id="resCount">— contacts</div>
+      </div>
+      <div class="grid" id="contactsGrid"></div>
+      <div class="no-res" id="noRes" style="display:none">Aucun contact trouvé</div>
+    </div>
+  </div>
+
+  <!-- VIEW: AGENDA -->
+  <div class="view" id="view-agenda">
+    <div class="c-pad">
+      <div class="sec-hdr">
+        <div class="sec-title">Agenda de Relances</div>
+        <div class="res-count">Priorité par inactivité</div>
+      </div>
+      <div class="agenda-list" id="agendaList"></div>
+    </div>
+  </div>
+
+  <!-- VIEW: ANALYTICS -->
+  <div class="view" id="view-analytics">
+    <div class="c-pad">
+      <div class="sec-hdr" style="margin-bottom:20px">
+        <div class="sec-title">Vue Analytique du Réseau</div>
+      </div>
+      <div class="analytics-grid">
+        <div class="a-card">
+          <div class="a-title">Répartition par Domaine</div>
+          <div id="domainBars"></div>
+        </div>
+        <div class="a-card">
+          <div class="a-title">Répartition Géographique</div>
+          <div id="geoBars"></div>
+        </div>
+        <div class="a-card">
+          <div class="a-title">Statuts des Contacts</div>
+          <div id="statusBars"></div>
+        </div>
+        <div class="a-card">
+          <div class="a-title">Couverture Stratégique</div>
+          <div class="coverage-grid" id="coverageGrid"></div>
+        </div>
+        <div class="a-card" style="grid-column:1/-1">
+          <div class="a-title">Zones de Force & Faiblesse</div>
+          <div id="swotGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main-content -->
+</div><!-- end app-body -->
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="detailOverlay" onclick="closeOverlay('detailOverlay',event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="document.getElementById('detailOverlay').classList.remove('open')">✕</button>
+    <div class="modal-tri">🔱</div>
+    <div class="modal-name" id="dName"></div>
+    <div class="modal-role" id="dRole"></div>
+    <div id="dBody"></div>
+  </div>
+</div>
+
+<!-- ADD FORM MODAL -->
+<div class="overlay" id="addOverlay" onclick="closeOverlay('addOverlay',event)">
+  <div class="form-box">
+    <button class="modal-close" onclick="document.getElementById('addOverlay').classList.remove('open')">✕</button>
+    <div class="modal-tri">🔱</div>
+    <div class="form-title">Nouveau Contact</div>
+    <div class="form-sub">Ajouter au Réseau Stratégique</div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Nom complet *</label><input class="fi" id="fName" placeholder="Prénom Nom"></div>
+      <div class="fg"><label class="fl">Domaine *</label>
+        <select class="fs" id="fDomaine">
+          <option value="juridique">Juridique & OHADA</option>
+          <option value="minier">Minier & Géologie</option>
+          <option value="academique">Académique & Pairs</option>
+          <option value="finance">Finance & Affaires</option>
+          <option value="institutionnel">Institutionnel</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Rôle / Titre</label><input class="fi" id="fRole" placeholder="Ex: Juriste d'Affaires"></div>
+    <div class="fg"><label class="fl">Organisation</label><input class="fi" id="fOrg" placeholder="Cabinet / Université / Entreprise"></div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Géographie</label>
+        <select class="fs" id="fGeo">
+          <option value="Guinée">Guinée</option>
+          <option value="France">France</option>
+          <option value="Cameroun">Cameroun</option>
+          <option value="Afrique">Côte d'Ivoire</option>
+          <option value="Afrique">Sénégal</option>
+          <option value="Afrique">Autres Afrique</option>
+          <option value="International">International</option>
+        </select>
+      </div>
+      <div class="fg"><label class="fl">Priorité</label>
+        <select class="fs" id="fPriority">
+          <option value="MAX">Maximale</option>
+          <option value="HAUTE" selected>Haute</option>
+          <option value="NORMALE">Normale</option>
+        </select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Contact WhatsApp/Tel</label><input class="fi" id="fContact" placeholder="+224 ..."></div>
+      <div class="fg"><label class="fl">Statut</label>
+        <select class="fs" id="fStatus">
+          <option value="actif">Actif</option>
+          <option value="attente">En attente</option>
+          <option value="reunion">Réunion planifiée</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Description</label><textarea class="fta" id="fDesc" placeholder="Profil, contexte, valeur stratégique..."></textarea></div>
+    <div class="fg"><label class="fl">Conseil clé reçu</label><textarea class="fta" id="fAdvice" placeholder="Le conseil le plus important..." style="min-height:55px"></textarea></div>
+    <div class="fg"><label class="fl">Tags (séparés par virgule)</label><input class="fi" id="fTags" placeholder="OHADA, Mines, France..."></div>
+    <div class="fg"><label class="fl">Action prioritaire</label><input class="fi" id="fAction" placeholder="Ex: Relancer après Module 2"></div>
+    <div class="fg"><label class="fl">Statut libellé court</label><input class="fi" id="fStatusLabel" placeholder="Ex: Contact établi — mars 2026"></div>
+    <button class="fsub" onclick="addContact()">🔱 AJOUTER AU RÉSEAU</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ======= DATA =======
+const BASE = [
+  {id:1,name:"Laye Moussa Cissé",role:"Juriste-Conseil — Droit Minier",org:"Emmergence Legal Afrique",domaine:"juridique",geo:"Guinée",priority:"MAX",status:"reunion",statusLabel:"Réunion physique post-Ramadan confirmée",tags:["Mines","Environnement","Hydrocarbures","PRIORITÉ MAX"],desc:"Appelle Legacy 'Camarade'. A transmis 8+ documents sur le droit minier guinéen. Référence absolue pour Simandou.",contact:"+224 (WhatsApp)",advice:"Prépare chaque échange avec des questions précises sur la législation minière guinéenne et Simandou.",action:"Réunion physique post-Ramadan — CONFIRMÉE",lastContact:2,heatScore:95},
+  {id:2,name:"Abdoulaye Thiam",role:"Directeur — Pavillon de la Guinée",org:"Exposition Universelle d'Osaka",domaine:"institutionnel",geo:"Afrique",priority:"MAX",status:"reunion",statusLabel:"RDV mentorat post-Ramadan confirmé",tags:["Institutionnel","Diplomatie","Osaka","International"],desc:"Contact institutionnel de très haut niveau. Rendez-vous de mentorat confirmé — non reporté.",contact:"WhatsApp confirmé",advice:"Prépare des questions précises sur les carrières institutionnelles africaines pour un jeune juriste guinéen.",action:"RDV mentorat post-Ramadan — CONFIRMÉ",lastContact:5,heatScore:90},
+  {id:3,name:"Mohamed Lamine Oularé",role:"Juriste — Mentor Référent Guinée",org:"Cabinet LG Avocats + African Diaspora Alliance",domaine:"juridique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Mentor référent — contact actif",tags:["Droit Maritime","Sociétés","OHADA","LG Avocats"],desc:"Ton frère et mentor référent méthodologie. Carré d'Or: Rigueur, Méthode, Curiosité, Constance.",contact:"+224 628 12 99 99",advice:"Carré d'Or: Rigueur, Méthode, Curiosité, Constance. C'est ta boussole de travail.",action:"Maintenir contact régulier",lastContact:7,heatScore:88},
+  {id:4,name:"Abdoulaye Kaba",role:"Juriste Droit Minier / ESG",org:"Major ISDD-Dakar",domaine:"minier",geo:"Afrique",priority:"HAUTE",status:"actif",statusLabel:"Mentorat actif — trajectoire validée",tags:["Droit Minier","ESG","Dakar","Trajectoire"],desc:"Appelle Legacy 'Grand Juriste'. A confirmé la trajectoire: Licence Droit des Affaires → Master Droit Minier France.",contact:"LinkedIn actif",advice:"Trajectoire validée: Licence Droit des Affaires (L3) → Master Droit Minier France → Multinationales.",action:"Suivi régulier trajectoire académique",lastContact:10,heatScore:80},
+  {id:5,name:"Koumandjan Traoré",role:"Major de Promo — Fiscaliste",org:"Grant Thornton Guinée",domaine:"finance",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Call 20min+ — 7 mars 2026",tags:["Fiscalité","Audit","Kouroussa","Grant Thornton"],desc:"Lien géographique fort — père de Legacy originaire de Kouroussa. Major de promo. Call 20min+ complété le 7 mars.",contact:"WhatsApp actif",advice:"Lignée des Mentors — Fiscalité. Lier fiscalité et droit des affaires pour un profil encore plus solide.",action:"Suivi post-call — relance Module 2",lastContact:4,heatScore:92},
+  {id:6,name:"Mamadou Alpha Diallo",role:"Étudiant Droit — France",org:"École de Droit Toulouse — Université Capitole",domaine:"academique",geo:"France",priority:"HAUTE",status:"actif",statusLabel:"Premier contact direct France",tags:["France","Toulouse","Commentaire d'arrêt","Méthodologie"],desc:"Premier contact direct France. Conseils: révision quasi-quotidienne, maîtriser commentaire d'arrêt dès L1.",contact:"LinkedIn / WhatsApp",advice:"Maîtriser le commentaire d'arrêt dès L1 est non-négociable. Passer de la récitation à l'analyse.",action:"Maintenir lien — ressource clé pour Master France",lastContact:15,heatScore:70},
+  {id:7,name:"Maître Siméon Wachou",role:"Business Lawyer — Arbitre International",org:"OHADA / CIRDI / OMPI — Cameroun",domaine:"juridique",geo:"Cameroun",priority:"HAUTE",status:"attente",statusLabel:"Contact établi — 22 déc 2025",tags:["OHADA","CIRDI","OMPI","Arbitrage"],desc:"Appelle Legacy 'Très cher Kaba'. Arbitre de haut niveau multi-institutions.",contact:"WhatsApp",advice:"Passerelle vers l'arbitrage international et les carrières OHADA de haut niveau.",action:"Relance après Module 2",lastContact:80,heatScore:30},
+  {id:8,name:"FONE Jean Pierre",role:"Juriste / Magistrat en devenir",org:"Cameroun — OHADA/CCJA",domaine:"juridique",geo:"Cameroun",priority:"HAUTE",status:"actif",statusLabel:"Contact actif — 11 mars 2026",tags:["OHADA","CCJA","Plaideur d'Or","Cameroun"],desc:"Plaideur d'Or, Prix Meilleur Mémoire OHADA 7e édition. Jurisprudence: Arrêt CCJA n°316/2025.",contact:"+237 692 807 271",advice:"L'Arrêt CCJA n°316/2025 sur l'inexistence DG par intérim est une référence clé à maîtriser.",action:"Contact récent — développer la relation",lastContact:0,heatScore:98},
+  {id:9,name:"Momoya Sylla",role:"Juriste d'Affaires — Président IFEJ",org:"Cabinet LG Avocats + Primature Guinée + PNUD",domaine:"juridique",geo:"France",priority:"HAUTE",status:"attente",statusLabel:"Répond irrégulièrement",tags:["OHADA","Droit Minier","Paris VIII","IFEJ"],desc:"19 ans d'expérience. Organisateur Week-end Africain Droit Minier/Énergie Paris VIII. Auteur ouvrages OHADA.",contact:"+224 624 08 08 08",advice:"Messages courts, précis, espacés. Ne pas forcer la cadence.",action:"Messages courts et espacés",lastContact:90,heatScore:20},
+  {id:10,name:"Eugène Nkili",role:"PhD Droit Public — Magistrat — Arbitre",org:"Université Douala + SADC — Paris",domaine:"juridique",geo:"Cameroun",priority:"HAUTE",status:"attente",statusLabel:"Mission suspendue — UGLC-S",tags:["Droit Public","Arbitrage","Douala","SADC"],desc:"Président SADC, Enseignant Douala, basé Paris. Call 27min. Mission UGLC-S non aboutie.",contact:"+237 654 807 793",advice:"Expert droit communautaire et arbitrage international. Maintenir le lien.",action:"Mission suspendue — maintenir le lien",lastContact:60,heatScore:35},
+  {id:11,name:"Seckna Savadogo",role:"Juriste Collaborateur d'Avocats",org:"Université Alassane Ouattara + Cabinet LG Avocats",domaine:"juridique",geo:"Afrique",priority:"HAUTE",status:"actif",statusLabel:"HAUTE PRIORITÉ — 2 mentors communs",tags:["Abidjan","LG Avocats","OHADA","Côte d'Ivoire"],desc:"Connecté à 2 mentors clés. 1412 abonnés LinkedIn. Ton: 'Cher frère KABA'.",contact:"LinkedIn actif",advice:"Double pont: Côte d'Ivoire + réseau LG Avocats.",action:"Maintenir lien LinkedIn actif",lastContact:20,heatScore:65},
+  {id:12,name:"Alseyni Bakayoko",role:"Président Cercle OHADA Guinée",org:"UGLC-S — Master 2 Droit Privé",domaine:"juridique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Gatekeeper OHADA UGLC-S",tags:["OHADA","UGLC-S","Cercle","Droit Affaires"],desc:"Gatekeeper pour le droit des affaires à l'UGLC-S. A offert son aide pour L1.",contact:"WhatsApp / LinkedIn",advice:"Le Cercle OHADA est une porte d'entrée stratégique. S'impliquer dès L1.",action:"Rejoindre activités Cercle OHADA",lastContact:18,heatScore:68},
+  {id:13,name:"Boubacar SY Savané",role:"Juriste Affaires — Assistant Legal",org:"Sycamore Mine Guinée",domaine:"juridique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Tutoiement validé — call mars 2026",tags:["Mines","Droit Affaires","Sycamore","Fraternité"],desc:"Juriste affaires dans le secteur minier. Tutoiement validé mars 2026. Call 7min complété.",contact:"WhatsApp",advice:"Pont unique entre droit des affaires et secteur minier guinéen.",action:"Suivi fraternel — ressource droit minier",lastContact:8,heatScore:83},
+  {id:14,name:"John Constant Kandet",role:"Juriste Affaires",org:"Cabinet / Entreprise",domaine:"juridique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Mon frère — conseils L1",tags:["Droit Affaires","Méthodologie","L1","Fraternité"],desc:"Appelle Legacy 'mon frère'. Conseils clés: dissertation, cas pratique, commentaire d'arrêt pour L1.",contact:"WhatsApp",advice:"Maîtriser les trois exercices: dissertation juridique, cas pratique, commentaire d'arrêt.",action:"Suivi méthodologie L1",lastContact:12,heatScore:75},
+  {id:15,name:"Mohamed Sangaré",role:"Juriste Droit des Affaires / Sport",org:"Master Université Bourgogne",domaine:"juridique",geo:"France",priority:"HAUTE",status:"actif",statusLabel:"Tutoiement — 14 nov 2025",tags:["France","Bourgogne","Droit Sport","Master"],desc:"Mentor pour le chemin Master France. Lien avec Mr Karamba Diaby (fiscaliste).",contact:"WhatsApp / LinkedIn",advice:"Ressource directe pour le Master en France.",action:"Suivi trajectoire Master France",lastContact:25,heatScore:58},
+  {id:16,name:"Raphaël Kolemou",role:"Assistant Master — Enseignant",org:"UGLC-S + Univ. Libre Guinée + Ambassade USA",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Mentorat actif depuis nov 2025",tags:["UGLC-S","Ambassade USA","Insider","Mentorat"],desc:"Insider UGLC-S + lien diplomatique US. Mentorat actif depuis novembre 2025.",contact:"WhatsApp",advice:"Double valeur: connaissance interne UGLC-S et passerelle diplomatique américaine.",action:"Contact régulier — ressource UGLC-S unique",lastContact:22,heatScore:62},
+  {id:17,name:"Dr Amadou Sidibé",role:"PhD Droit International — Enseignant",org:"Terre des Hommes + UGLC-S",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"attente",statusLabel:"Rencontre prévue 2e semestre",tags:["Droit International","ONG","UGLC-S","PhD"],desc:"Contact établi déc 2025, relancé mars 2026. Rencontre physique prévue au 2e semestre.",contact:"613 72 98 17",advice:"Pont vers le droit international et les ONG.",action:"Planifier rencontre 2e semestre",lastContact:10,heatScore:78},
+  {id:18,name:"Lamine Kaba",role:"Master 1 Droit des Affaires",org:"Université Kofi Annan Guinée",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Mentorat actif — PDFs transmis",tags:["OHADA","Méthodologie","Digital","GED"],desc:"A transmis PDFs clés OHADA/méthodologie. Conseil urgent: maîtriser les outils digitaux.",contact:"WhatsApp",advice:"Maîtriser Word, Excel, Google Drive et GED différencie sur le marché.",action:"Acquérir laptop + formation outils digitaux",lastContact:9,heatScore:82},
+  {id:19,name:"Michel I Lamah",role:"L2 Droit Privé — Assistant Cabinet",org:"UGLC-S + Étude Légale Labilé + Cercle OHADA",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Modèle L2 — 500+ LinkedIn",tags:["L2","UGLC-S","Cabinet","OHADA"],desc:"L2 Droit Privé UGLC-S, Assistant Cabinet Avocats, Sec. Aff. Ext. Cercle OHADA, 500+ LinkedIn.",contact:"LinkedIn / WhatsApp",advice:"Modèle à suivre: étudiant ET déjà en cabinet. C'est le profil à construire dès L1.",action:"S'inspirer de son parcours",lastContact:16,heatScore:70},
+  {id:20,name:"Souleymane Bah Baldé",role:"L2 Droit — UGLC-S Sonfonia",org:"UGLC-S",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Intel clé — prof Droit Commercial",tags:["L2","UGLC-S","Droit Commercial","Intel"],desc:"Intel: prof Droit Commercial offre des stages chaque vacation — se faire remarquer Day 1.",contact:"WhatsApp",advice:"Répondre à la première question du prof de Droit Commercial dès le 1er cours.",action:"URGENT: se préparer pour Day 1 Module 2",lastContact:6,heatScore:87},
+  {id:21,name:"Bernard Mara",role:"L2 Droit — UGLC-S",org:"UGLC-S",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Sujets d'examen partagés",tags:["L2","UGLC-S","Examens","Pairs"],desc:"L2 UGLC-S. A partagé d'anciens sujets d'examen et conseils sur les professeurs.",contact:"WhatsApp",advice:"Les anciens sujets sont une ressource rare. Maintenir cette relation.",action:"Obtenir profil complet prof Droit Commercial",lastContact:14,heatScore:72},
+  {id:22,name:"Mamadi Keita",role:"L2 Droit / Sciences Po — Activiste",org:"UGLC-S",domaine:"academique",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Relation fraternelle",tags:["L2","Sciences Po","Activisme","Fraternité"],desc:"L2 Droit/Sc.Po, activiste. Relation fraternelle. Profil hybride droit/politique.",contact:"WhatsApp",advice:"La dimension politique et civique complète bien le profil juridique.",action:"Maintenir lien fraternel",lastContact:11,heatScore:77},
+  {id:23,name:"Maître N'dji Condé",role:"Chef du Greffe TPI — Notaire",org:"TPI Kérouané — Huissier Ad hoc",domaine:"institutionnel",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Échange vocal complété",tags:["TPI","Greffe","Notariat","Kérouané"],desc:"Chef greffe TPI Kérouané, Notaire, Huissier Ad hoc. Échange vocal effectué.",contact:"621 19 54 49",advice:"Fenêtre unique sur le terrain judiciaire guinéen.",action:"Suivi — ressource terrain judiciaire",lastContact:20,heatScore:65},
+  {id:24,name:"Zeze Kalivogui",role:"Senior Mine Geologist",org:"Rio Tinto Guinée",domaine:"minier",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Accord mentorat établi",tags:["Rio Tinto","Géologie","Mines","Simandou"],desc:"Senior Geologist Rio Tinto. Accord établi pour échanger et conseiller Legacy.",contact:"+224 622 62 63 09",advice:"Comprendre les réalités terrain de Rio Tinto est un avantage compétitif immense.",action:"Mentorat industriel — préparation Master Minier",lastContact:18,heatScore:68},
+  {id:25,name:"Mamady Kouyaté",role:"Mine Geologist / Production",org:"Dynamic Mining — ISMGB Boké",domaine:"minier",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Mentorat opérationnel activé",tags:["Dynamic Mining","Boké","Production","Terrain"],desc:"Géologue terrain région Boké. Mentorat opérationnel activé.",contact:"621 85 44 61",advice:"La région de Boké est au cœur de l'industrie minière guinéenne.",action:"Suivi mentorat opérationnel",lastContact:15,heatScore:71},
+  {id:26,name:"Nyanga Haba",role:"Géologue Exploration / QC / Géotechnique",org:"Guinée",domaine:"minier",geo:"Guinée",priority:"HAUTE",status:"actif",statusLabel:"Appels 23min + 20min complétés",tags:["Géologie","Exploration","QC","Géotechnique"],desc:"Appelle Legacy 'Mr Kaba'. Deux longs appels complétés (23min + 20min).",contact:"+224 620 465 631",advice:"La dimension géotechnique est fondamentale dans les litiges miniers.",action:"Mentorat actif — suivi régulier",lastContact:8,heatScore:83},
+  {id:27,name:"Ibrahima Bah",role:"Haute Finance — Leadership Africain",org:"African Bank of Diaspora",domaine:"finance",geo:"Afrique",priority:"HAUTE",status:"attente",statusLabel:"A prédit 'bel avenir' pour Legacy",tags:["Finance","Diaspora","Leadership","Banque"],desc:"Premier pilier réseau Haute Finance. A prédit un bel avenir pour Legacy.",contact:"WhatsApp",advice:"Peu de juristes ont accès à ce niveau financier. Garder ce lien précieux.",action:"Relance après Module 2",lastContact:45,heatScore:40},
+  {id:28,name:"Mathieu Lake",role:"Expert Fiscalité / Droit des Affaires",org:"Cabinet indépendant",domaine:"finance",geo:"Afrique",priority:"HAUTE",status:"actif",statusLabel:"Jumeaux d'anniversaire — 31 déc",tags:["Fiscalité","Droit Affaires","31 décembre"],desc:"Jumeaux d'anniversaire (31 décembre). Conseil: spécialiser en fiscalité pour compléter le profil.",contact:"WhatsApp",advice:"La fiscalité est le complément parfait du droit des affaires.",action:"Maintenir lien — anniversaire commun",lastContact:30,heatScore:52},
+  {id:29,name:"Siendou Ouattara",role:"Expert Sécurité/Défense — Président SAFOI",org:"OCE — Organisation des Criminologues",domaine:"institutionnel",geo:"Afrique",priority:"HAUTE",status:"reunion",statusLabel:"⚡ CALL SAM 14 MARS — 20H15",tags:["Sécurité","Défense","Criminologie","Côte d'Ivoire"],desc:"Pont stratégique droit/sécurité dans projets miniers africains.",contact:"+225 0506888312",advice:"La sécurité est un enjeu central dans les projets miniers africains.",action:"⚡ CALL SAMEDI 14 MARS 2026 — 20H15",lastContact:0,heatScore:99},
+  {id:30,name:"Yaya Savané",role:"L2 Droit — Côte d'Ivoire",org:"Université — Côte d'Ivoire",domaine:"academique",geo:"Afrique",priority:"NORMALE",status:"actif",statusLabel:"Contact diaspora CI",tags:["L2","Côte d'Ivoire","Diaspora"],desc:"L2 Droit en Côte d'Ivoire. Lien diaspora francophone précieux.",contact:"WhatsApp",advice:"Le réseau étudiant francophone est une ressource à long terme.",action:"Maintenir lien diaspora",lastContact:30,heatScore:50},
+  {id:31,name:"Muhammad Rassoul Mbaye",role:"Juriste — Dakar",org:"Sénégal",domaine:"juridique",geo:"Afrique",priority:"NORMALE",status:"actif",statusLabel:"La famille — Dakar",tags:["Sénégal","Dakar","Famille réseau"],desc:"Appelle Legacy 'la famille'. Juriste basé Dakar. Lien sénégalais dans le réseau.",contact:"WhatsApp",advice:"Dakar est un hub juridique et financier africain majeur.",action:"Maintenir lien familial réseau",lastContact:25,heatScore:58},
+  {id:32,name:"Mory Diabaté",role:"Master 2 Urbanisme",org:"ENSA Nantes — France",domaine:"academique",geo:"France",priority:"NORMALE",status:"actif",statusLabel:"Contact Nantes — France",tags:["France","Nantes","Urbanisme","Diaspora"],desc:"Master 2 Urbanisme ENSA Nantes. Lien Guinée → France pour la future expatriation.",contact:"WhatsApp",advice:"Lien pratique pour la transition Guinée → France.",action:"Solliciter quand visa/logement France nécessaire",lastContact:35,heatScore:45},
+  {id:33,name:"Latifa Sarah Koné",role:"Journaliste",org:"Médias — Guinée",domaine:"institutionnel",geo:"Guinée",priority:"NORMALE",status:"actif",statusLabel:"Contact médias",tags:["Journalisme","Médias","Communication"],desc:"Journaliste. Lien médias précieux pour la stratégie de communication griot 2.0.",contact:"WhatsApp",advice:"Un juriste visible dans les médias a une carrière plus rapide.",action:"Maintenir pour stratégie communication",lastContact:28,heatScore:54},
+  {id:34,name:"Innocent Paul Gnanaweamou",role:"Étudiant UGLC-S",org:"UGLC-S",domaine:"academique",geo:"Guinée",priority:"NORMALE",status:"actif",statusLabel:"Pair UGLC-S",tags:["UGLC-S","Pairs","L1","Campus"],desc:"Pair UGLC-S. Réseau de proximité campus pour l'entraide académique.",contact:"WhatsApp",advice:"Les pairs de campus sont la première ligne de soutien.",action:"Entraide académique quotidienne",lastContact:5,heatScore:88},
+  {id:35,name:"Amadou Baillo Baldé",role:"Étudiant UGLC-S",org:"UGLC-S",domaine:"academique",geo:"Guinée",priority:"NORMALE",status:"actif",statusLabel:"Pair UGLC-S",tags:["UGLC-S","Pairs","L1"],desc:"Pair UGLC-S. Réseau de proximité campus.",contact:"WhatsApp",advice:"Réseau de proximité — entraide pour les cours et examens.",action:"Entraide académique",lastContact:4,heatScore:90},
+  {id:36,name:"Jean Koné",role:"Juriste Marchés Publics",org:"Expertise France — KPEI DA CONSEIL",domaine:"juridique",geo:"Guinée",priority:"HAUTE",status:"attente",statusLabel:"Stage raté — À relancer dès laptop acquis",tags:["Marchés Publics","Expertise France","Stage","KPEI"],desc:"Stage raté faute de laptop et bases informatiques. À relancer impérativement.",contact:"622 616 030 | contact@kpeidaconseil.com",advice:"Acquérir laptop + Word/Excel/GED d'abord. Ce stage est une opportunité à ne pas rater deux fois.",action:"RELANCER dès laptop + bases informatiques acquis",lastContact:40,heatScore:42},
+];
+
+let contacts = BASE.map(c => ({...c, notes: localStorage.getItem('note_'+c.id)||'', lastContact: c.lastContact}));
+let activeF = {type:'all',value:'all'};
+let searchV = '';
+
+// ======= UTILS =======
+function statusColor(s){return{actif:'#27AE60',attente:'#C9A84C',reunion:'#D35400',urgent:'#C0392B'}[s]||'#B8A98A';}
+function priStyle(p){return{MAX:{c:'#C0392B',b:'#C0392B'},HAUTE:{c:'#D35400',b:'#D35400'},NORMALE:{c:'#27AE60',b:'#27AE60'}}[p]||{c:'#B8A98A',b:'#B8A98A'};}
+function domColor(d){return{juridique:'#2980B9',minier:'#D35400',academique:'#27AE60',finance:'#8E44AD',institutionnel:'#C0392B'}[d]||'#C9A84C';}
+function heatColor(h){if(h>=75)return'#C0392B';if(h>=50)return'#E67E22';return'#2980B9';}
+function heatLabel(h){if(h>=75)return'🔴 Chaud';if(h>=50)return'🟠 Tiède';return'🔵 À relancer';}
+function daysSince(d){return d;}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ======= FILTERS =======
+function setFilter(type,value,btn){
+  activeF={type,value};
+  document.querySelectorAll('.s-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+function applyFilters(){
+  searchV=document.getElementById('searchInput')?document.getElementById('searchInput').value:'';
+  renderCards(getFiltered());
+}
+function getFiltered(){
+  return contacts.filter(c=>{
+    const {type,value}=activeF;
+    let m=true;
+    if(type==='domaine')m=c.domaine===value;
+    else if(type==='priority')m=c.priority===value;
+    else if(type==='status')m=c.status===value;
+    else if(type==='geo'){m=value==='Afrique'?!['Guinée','France','Cameroun'].includes(c.geo):c.geo===value;}
+    else if(type==='heat'){
+      if(value==='hot')m=c.heatScore>=75;
+      else if(value==='warm')m=c.heatScore>=50&&c.heatScore<75;
+      else m=c.heatScore<50;
+    }
+    if(searchV){
+      const s=searchV.toLowerCase();
+      m=m&&(c.name.toLowerCase().includes(s)||c.role.toLowerCase().includes(s)||c.tags.some(t=>t.toLowerCase().includes(s))||c.geo.toLowerCase().includes(s)||c.desc.toLowerCase().includes(s));
+    }
+    return m;
+  });
+}
+
+// ======= RENDER CARDS =======
+function renderCards(list){
+  const g=document.getElementById('contactsGrid');
+  const nr=document.getElementById('noRes');
+  const rc=document.getElementById('resCount');
+  if(!list.length){g.innerHTML='';nr.style.display='block';rc.textContent='0 contact';return;}
+  nr.style.display='none';
+  rc.textContent=`${list.length} contact${list.length>1?'s':''}`;
+  g.innerHTML=list.map((c,i)=>{
+    const ps=priStyle(c.priority);
+    const dc=domColor(c.domaine);
+    const hc=heatColor(c.heatScore);
+    const newBadge=c.isNew?'<span class="new-badge">NOUVEAU</span>':'';
+    return `<div class="card" style="animation:fadeIn 0.35s ${i%10*30}ms both" onclick="openDetail(${c.id})">
+      <div class="card-stripe" style="background:${dc}"></div>
+      <div class="card-top">
+        <div class="card-name">${c.name}${newBadge}</div>
+        <div class="card-pri" style="color:${ps.c};border-color:${ps.b}">${c.priority}</div>
+      </div>
+      <div class="card-role">${c.role}</div>
+      <div class="card-desc">${c.desc.substring(0,90)}${c.desc.length>90?'...':''}</div>
+      <div class="card-tags">${c.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="heat-bar" style="background:${hc};width:${c.heatScore}%;opacity:0.7;margin-bottom:6px;"></div>
+      <div class="card-status">
+        <div class="sdot2" style="background:${statusColor(c.status)}"></div>
+        ${c.statusLabel}
+        <span style="margin-left:auto;font-size:7px;color:${hc}">${heatLabel(c.heatScore)}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ======= DETAIL =======
+function openDetail(id){
+  const c=contacts.find(x=>x.id===id);if(!c)return;
+  const ps=priStyle(c.priority);
+  document.getElementById('dName').textContent=c.name;
+  document.getElementById('dRole').textContent=c.role+' — '+c.org;
+  const hc=heatColor(c.heatScore);
+  const savedNote=localStorage.getItem('note_'+c.id)||'';
+  document.getElementById('dBody').innerHTML=`
+    <div style="display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border:1px solid ${hc};color:${hc};font-size:8px;letter-spacing:1px;margin-bottom:14px">${heatLabel(c.heatScore)} — Chaleur: ${c.heatScore}/100</div>
+    <div class="ms"><div class="ms-t">Profil</div><div class="ms-v">${c.desc}</div></div>
+    <div class="ms">
+      <div class="ms-t">Contact & Localisation</div>
+      <div class="info-row">📱 ${c.contact}</div>
+      <div class="info-row">🌍 ${c.geo} &nbsp;|&nbsp; ${c.domaine.charAt(0).toUpperCase()+c.domaine.slice(1)}</div>
+      <div class="info-row" style="border-left:2px solid ${statusColor(c.status)}">⚡ ${c.statusLabel}</div>
+    </div>
+    <div class="ms"><div class="ms-t">Conseil Clé</div><div class="advice-box">"${c.advice}"</div></div>
+    <div class="ms"><div class="ms-t">Action Prioritaire</div><div class="action-box">${c.action}</div></div>
+    <div class="ms">
+      <div class="ms-t">Notes Personnelles</div>
+      <textarea class="notes-area" id="noteArea_${c.id}" placeholder="Tes notes sur cet échange, promesses, idées...">${savedNote}</textarea>
+      <button class="save-note-btn" onclick="saveNote(${c.id})">💾 SAUVEGARDER NOTE</button>
+    </div>
+    <div class="ms"><div class="ms-t">Tags</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:3px">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div></div>
+  `;
+  document.getElementById('detailOverlay').classList.add('open');
+}
+
+function saveNote(id){
+  const val=document.getElementById('noteArea_'+id).value;
+  localStorage.setItem('note_'+id,val);
+  const c=contacts.find(x=>x.id===id);
+  if(c)c.notes=val;
+  showToast('📝 Note sauvegardée');
+}
+
+// ======= AGENDA =======
+function renderAgenda(){
+  const sorted=[...contacts].sort((a,b)=>b.lastContact-a.lastContact);
+  const list=document.getElementById('agendaList');
+  list.innerHTML=sorted.map(c=>{
+    const urg=c.lastContact>60?'#C0392B':c.lastContact>30?'#D35400':c.lastContact>14?'#C9A84C':'#27AE60';
+    const msg=c.lastContact===0?'Aujourd\'hui':c.lastContact<7?`Il y a ${c.lastContact}j`:c.lastContact<30?`Il y a ${c.lastContact}j`:`Il y a ${c.lastContact}j ⚠️`;
+    return `<div class="agenda-item" onclick="openDetail(${c.id})">
+      <div class="agenda-urgency" style="background:${urg}"></div>
+      <div style="flex:1">
+        <div class="agenda-name">${c.name}</div>
+        <div class="agenda-info">${c.role} &nbsp;·&nbsp; ${c.geo}</div>
+        <div class="agenda-info" style="margin-top:3px;color:${urg}">${c.action}</div>
+      </div>
+      <div class="agenda-days">
+        <div class="num">${c.lastContact}</div>
+        <div class="lbl">jours</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ======= ANALYTICS =======
+function renderAnalytics(){
+  const domains=['juridique','minier','academique','finance','institutionnel'];
+  const domLabels={'juridique':'Juridique','minier':'Minier','academique':'Académique','finance':'Finance','institutionnel':'Institutionnel'};
+  const max=contacts.length;
+
+  // Domain bars
+  document.getElementById('domainBars').innerHTML=domains.map(d=>{
+    const n=contacts.filter(c=>c.domaine===d).length;
+    const pct=Math.round(n/max*100);
+    return `<div class="bar-row"><div class="bar-label">${domLabels[d]}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${domColor(d)}"></div></div><div class="bar-num">${n}</div></div>`;
+  }).join('');
+
+  // Geo bars
+  const geos=[['Guinée','#C9A84C'],['France','#2980B9'],['Cameroun','#27AE60'],['Autres','#D35400']];
+  document.getElementById('geoBars').innerHTML=geos.map(([g,color])=>{
+    const n=g==='Autres'?contacts.filter(c=>!['Guinée','France','Cameroun'].includes(c.geo)).length:contacts.filter(c=>c.geo===g).length;
+    const pct=Math.round(n/max*100);
+    return `<div class="bar-row"><div class="bar-label">${g}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="bar-num">${n}</div></div>`;
+  }).join('');
+
+  // Status bars
+  const statuses=[['actif','Actif','#27AE60'],['attente','En attente','#C9A84C'],['reunion','Réunion','#D35400']];
+  document.getElementById('statusBars').innerHTML=statuses.map(([s,l,color])=>{
+    const n=contacts.filter(c=>c.status===s).length;
+    const pct=Math.round(n/max*100);
+    return `<div class="bar-row"><div class="bar-label">${l}</div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div><div class="bar-num">${n}</div></div>`;
+  }).join('');
+
+  // Coverage grid
+  const coverItems=[
+    {label:'Guinée Juridique',score:contacts.filter(c=>c.geo==='Guinée'&&c.domaine==='juridique').length,max:5},
+    {label:'France',score:contacts.filter(c=>c.geo==='France').length,max:4},
+    {label:'Minier Terrain',score:contacts.filter(c=>c.domaine==='minier').length,max:4},
+    {label:'Finance',score:contacts.filter(c=>c.domaine==='finance').length,max:4},
+    {label:'OHADA Inter.',score:contacts.filter(c=>c.tags.some(t=>t==='OHADA')&&c.geo!=='Guinée').length,max:3},
+    {label:'Chauds (>75)',score:contacts.filter(c=>c.heatScore>=75).length,max:10},
+  ];
+  document.getElementById('coverageGrid').innerHTML=coverItems.map(item=>{
+    const pct=Math.min(Math.round(item.score/item.max*100),100);
+    const cls=pct>=70?'strong':pct<=40?'weak':'';
+    return `<div class="cov-cell ${cls}"><div class="cov-score">${item.score}</div><div class="cov-label">${item.label}</div></div>`;
+  }).join('');
+
+  // SWOT
+  document.getElementById('swotGrid').innerHTML=`
+    <div style="background:#1A1A1A;padding:14px;border:1px solid rgba(39,174,96,0.2)">
+      <div style="font-size:8px;color:#27AE60;letter-spacing:2px;margin-bottom:8px">✅ FORCES</div>
+      <div style="font-size:9px;color:#B8A98A;line-height:1.8">
+        • Fort réseau juridique Guinée (${contacts.filter(c=>c.geo==='Guinée'&&c.domaine==='juridique').length} contacts)<br>
+        • Contacts OHADA multi-pays<br>
+        • Mentorat minier terrain actif<br>
+        • ${contacts.filter(c=>c.priority==='MAX').length} contacts priorité maximale
+      </div>
+    </div>
+    <div style="background:#1A1A1A;padding:14px;border:1px solid rgba(192,57,43,0.2)">
+      <div style="font-size:8px;color:#C0392B;letter-spacing:2px;margin-bottom:8px">⚠️ FAIBLESSES</div>
+      <div style="font-size:9px;color:#B8A98A;line-height:1.8">
+        • Finance internationale sous-représentée<br>
+        • Peu de contacts France (${contacts.filter(c=>c.geo==='France').length} seulement)<br>
+        • ${contacts.filter(c=>c.heatScore<50).length} contacts froids à relancer<br>
+        • Zéro contact Japon/Asie (Bourse Eiffel)
+      </div>
+    </div>
+    <div style="background:#1A1A1A;padding:14px;border:1px solid rgba(201,168,76,0.2)">
+      <div style="font-size:8px;color:#C9A84C;letter-spacing:2px;margin-bottom:8px">🎯 OPPORTUNITÉS</div>
+      <div style="font-size:9px;color:#B8A98A;line-height:1.8">
+        • Réseau LG Avocats à exploiter<br>
+        • Cercle OHADA UGLC-S à rejoindre<br>
+        • Stage Jean Koné — dès laptop acquis<br>
+        • Bourse Eiffel 2028 — recruter contacts France
+      </div>
+    </div>
+    <div style="background:#1A1A1A;padding:14px;border:1px solid rgba(142,68,173,0.2)">
+      <div style="font-size:8px;color:#8E44AD;letter-spacing:2px;margin-bottom:8px">🚀 ACTIONS CLÉS</div>
+      <div style="font-size:9px;color:#B8A98A;line-height:1.8">
+        • Call Siendou Ouattara SAM 14 MARS<br>
+        • RDV Laye Moussa + Abdoulaye Thiam<br>
+        • Relancer ${contacts.filter(c=>c.heatScore<50).length} contacts froids après Module 2<br>
+        • Acquérir laptop → relancer Jean Koné
+      </div>
+    </div>
+  `;
+}
+
+// ======= VIEWS =======
+function switchView(name,btn){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  btn.classList.add('active');
+  if(name==='agenda')renderAgenda();
+  if(name==='analytics')renderAnalytics();
+}
+
+// ======= ADD CONTACT =======
+function openAddForm(){document.getElementById('addOverlay').classList.add('open');}
+function addContact(){
+  const name=document.getElementById('fName').value.trim();
+  if(!name){showToast('⚠️ Nom obligatoire');return;}
+  const newId=Math.max(...contacts.map(c=>c.id))+1;
+  const tags=document.getElementById('fTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  contacts.push({
+    id:newId,name,
+    role:document.getElementById('fRole').value||'Non renseigné',
+    org:document.getElementById('fOrg').value||'Non renseigné',
+    domaine:document.getElementById('fDomaine').value,
+    geo:document.getElementById('fGeo').value,
+    priority:document.getElementById('fPriority').value,
+    status:document.getElementById('fStatus').value,
+    statusLabel:document.getElementById('fStatusLabel').value||'Contact ajouté',
+    tags:tags.length?tags:['Nouveau'],
+    desc:document.getElementById('fDesc').value||'Nouveau contact stratégique.',
+    contact:document.getElementById('fContact').value||'À renseigner',
+    advice:document.getElementById('fAdvice').value||'À documenter.',
+    action:document.getElementById('fAction').value||'Développer la relation',
+    lastContact:0,heatScore:85,notes:'',isNew:true
+  });
+  updateStats();applyFilters();
+  document.getElementById('addOverlay').classList.remove('open');
+  ['fName','fRole','fOrg','fContact','fDesc','fAdvice','fTags','fAction','fStatusLabel'].forEach(id=>{document.getElementById(id).value='';});
+  showToast(`🔱 ${name} ajouté au réseau`);
+}
+
+// ======= EXPORT =======
+function exportVisible(){
+  const list=getFiltered();
+  const txt=list.map(c=>`${c.name}\n${c.role} — ${c.org}\nContact: ${c.contact}\nStatut: ${c.statusLabel}\nAction: ${c.action}\n${'-'.repeat(40)}`).join('\n\n');
+  const blob=new Blob([`LEGACY DJOUBATÉ — Réseau Stratégique\nExport: ${new Date().toLocaleDateString('fr-FR')}\n${'='.repeat(40)}\n\n${txt}`],{type:'text/plain'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='reseau-legacy.txt';a.click();
+  showToast('📥 Export téléchargé');
+}
+
+// ======= MODAL CLOSE =======
+function closeOverlay(id,e){if(e.target===document.getElementById(id))document.getElementById(id).classList.remove('open');}
+
+// ======= SIDEBAR MOBILE TOGGLE =======
+function toggleSidebar(){
+  const s=document.getElementById('sidebarSections');
+  const i=document.getElementById('toggleIcon');
+  s.classList.toggle('collapsed');
+  i.textContent=s.classList.contains('collapsed')?'▶':'▼';
+}
+
+// ======= STATS =======
+function updateStats(){
+  document.getElementById('sTot').textContent=contacts.length;
+  document.getElementById('sPri').textContent=contacts.filter(c=>c.priority==='MAX').length;
+  document.getElementById('sAct').textContent=contacts.filter(c=>c.status==='actif'||c.status==='reunion').length;
+  document.getElementById('b-all').textContent=contacts.length;
+  ['juridique','minier','academique','finance','institutionnel'].forEach(d=>{
+    const el=document.getElementById('b-'+d);
+    if(el)el.textContent=contacts.filter(c=>c.domaine===d).length;
+  });
+}
+
+// ======= KEYBOARD =======
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.getElementById('detailOverlay').classList.remove('open');
+    document.getElementById('addOverlay').classList.remove('open');
+  }
+});
+
+// ======= ANIMATION =======
+const style=document.createElement('style');
+style.textContent='@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(style);
+
+// ======= INIT =======
+updateStats();
+renderCards(contacts);
+</script>
+</body>
+</html>
